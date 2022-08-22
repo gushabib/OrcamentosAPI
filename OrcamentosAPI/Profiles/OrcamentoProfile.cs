@@ -11,7 +11,6 @@ namespace OrcamentosAPI.Profiles
 
             CreateMap<CreateOrcamentoDto, Orcamento>();
             CreateMap<Orcamento, ReadOrcamentoDto>();
-            CreateMap<UpdateOrcamentoDto, Orcamento>();
         }
     }
 }

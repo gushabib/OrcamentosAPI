@@ -14,7 +14,6 @@ namespace OrcamentosAPI.Controllers
 
         private LivroContext _context;
         private IMapper _mapper;
-        private Livro livro = new Livro();
 
         public OrcamentoController(LivroContext context, IMapper mapper)
         {
@@ -61,26 +60,6 @@ namespace OrcamentosAPI.Controllers
             return NotFound();
         }
 
-        [HttpPut("{id}")]
-        public IActionResult AtualizaOrcamento(int id, [FromBody] UpdateOrcamentoDto orcamentoDto)
-        {
-            Orcamento orcamento = _context.Orcamentos.FirstOrDefault(orcamento => orcamento.Id == id);
-            if (orcamento == null)
-            {
-                return NotFound();
-            }
-
-            orcamento.ValorPorLivro = orcamento.ValorPorPagina * livro.QtdPaginas;
-            orcamento.ValorTotalLivros = orcamento.ValorPorLivro * orcamento.QtdLivros;
-
-            _mapper.Map(orcamentoDto, orcamento);
-
-            orcamento.LivroId = livro.Id;
-
-            _context.SaveChanges();
-            return NoContent();
-        }
-
         [HttpDelete("{id}")]
         public IActionResult DeletaOrcamento(int id)
         {
@@ -93,19 +72,5 @@ namespace OrcamentosAPI.Controllers
             _context.SaveChanges();
             return NoContent();
         }
-
-        /*[HttpGet("calcula/{id}")]
-        public IActionResult CalculaLivro(int id, [FromBody] CalcLivroDto livroDto)
-        {
-            Livro livro = _context.Livros.FirstOrDefault(livro => livro.Id == id);
-            if (livro != null)
-            {
-                _mapper.Map(livroDto, livro);
-                livroDto.ValorPorLivro = livroDto.ValorPorPagina * livroDto.QtdPaginas;
-                livroDto.ValorTotalLivros = livroDto.ValorPorLivro * livroDto.QtdLivros;
-                return Ok(livroDto);
-            }
-            return NotFound();
-        }*/
     }
 }
