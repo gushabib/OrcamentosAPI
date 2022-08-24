@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using OrcamentosAPI.Data.Dtos;
+using OrcamentosAPI.Data.Dtos.Budget;
 using OrcamentosAPI.Models;
 
 namespace OrcamentosAPI.Profiles
@@ -11,6 +11,7 @@ namespace OrcamentosAPI.Profiles
 
             CreateMap<CreateOrcamentoDto, Orcamento>();
             CreateMap<Orcamento, ReadOrcamentoDto>();
+            CreateMap<UpdateOrcamentoDto, Produto>();
         }
     }
 }

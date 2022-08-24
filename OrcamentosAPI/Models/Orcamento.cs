@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace OrcamentosAPI.Models
 {
@@ -8,13 +9,14 @@ namespace OrcamentosAPI.Models
         [Required]
         public int Id { get; set; }
         [Required]
-        public double QtdLivros { get; set; }
-        public double ValorPorPagina { get; set; }
-        public double ValorPorLivro { get; set; }
-        public double ValorTotalLivros { get; set; }
+        public int ProdutoId { get; set; }
         [Required]
-        public double ComissaoVendedor { get; set; }
-        public virtual Livro Livro { get; set; }
-        public int LivroId { get; set; }
+        public int VendedorId { get; set; }
+        [Required]
+        public double QtdProdutos { get; set; }
+        [JsonIgnore]
+        public double ValorTotalProdutos { get; set; }
+        public virtual Produto Produto { get; set; }
+        public virtual Vendedor Vendedor { get; set; }
     }
 }

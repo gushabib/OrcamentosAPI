@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using OrcamentosAPI.Data;
 using System.Configuration;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -14,7 +15,7 @@ builder.Services.AddSwaggerGen();
 
 var connection = "server=localhost;user=root;password=root;database=OrcamentosAPI";
 
-builder.Services.AddDbContext<LivroContext>(options => options.UseMySql(connection, new MySqlServerVersion(new Version(8, 0, 29))));
+IServiceCollection serviceCollection = builder.Services.AddDbContext<DbAppContext>(options => options.UseLazyLoadingProxies().UseMySql(connection, new MySqlServerVersion(new Version(8, 0, 29))));
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

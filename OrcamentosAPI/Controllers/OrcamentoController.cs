@@ -2,7 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OrcamentosAPI.Data;
-using OrcamentosAPI.Data.Dtos;
+using OrcamentosAPI.Data.Dtos.Budget;
+using OrcamentosAPI.Data.Dtos.Product;
 using OrcamentosAPI.Models;
 
 namespace OrcamentosAPI.Controllers
@@ -12,49 +13,45 @@ namespace OrcamentosAPI.Controllers
     public class OrcamentoController : ControllerBase
     {
 
-        private LivroContext _context;
+        private DbAppContext _context;
         private IMapper _mapper;
 
-        public OrcamentoController(LivroContext context, IMapper mapper)
+        public OrcamentoController(DbAppContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
         }
 
-        [HttpPost("{id}")]
-        public IActionResult AdicionaOrcamento(int id, CreateOrcamentoDto orcamentoDto)
-        {
-            Livro livro = _context.Livros.FirstOrDefault(livro => livro.Id == id);
-            if (livro == null)
-            {
-                return NotFound();
-            }
+        [HttpPost]
+        public IActionResult AdicionaOrcamento(CreateOrcamentoDto orcamentoDto)
+        {            
             Orcamento orcamento = _mapper.Map<Orcamento>(orcamentoDto);
+            Produto produto = _context.Produto.FirstOrDefault(produto => produto.Id == orcamento.ProdutoId);
 
-            orcamento.ValorPorLivro = orcamento.ValorPorPagina * livro.QtdPaginas;
-            orcamento.ValorTotalLivros = orcamento.ValorPorLivro * orcamento.QtdLivros;
-
-            orcamento.LivroId = livro.Id;
+            orcamento.ValorTotalProdutos = orcamento.QtdProdutos * produto.Valor;
 
             _context.Orcamentos.Add(orcamento);
             _context.SaveChanges();
-            return CreatedAtAction(nameof(RecuperaOrcamentoPorId), new { Id = orcamento.Id }, orcamento);
+            return CreatedAtAction(nameof(RecuperaOrcamento), new { Id = orcamento.Id }, orcamento);
 
         }
 
         [HttpGet]
-        public IEnumerable<Orcamento> RecuperaOrcamento()
+        public IActionResult RecuperaOrcamento([FromQuery] int? id = null)
         {
-            return _context.Orcamentos;
-        }
-
-        [HttpGet("{id}")]
-        public IActionResult RecuperaOrcamentoPorId(int id)
-        {
-            Orcamento orcamento = _context.Orcamentos.FirstOrDefault(orcamento => orcamento.Id == id);
+            List<Orcamento> orcamento;
+            if (id == null)
+            {
+                orcamento = _context.Orcamentos.ToList();
+            }
+            else
+            {
+                orcamento = _context
+                .Orcamentos.Where(orcamento => orcamento.Id == id).ToList();
+            }
             if (orcamento != null)
             {
-                ReadOrcamentoDto orcamentoDto = _mapper.Map<ReadOrcamentoDto>(orcamento);
+                List<ReadOrcamentoDto> orcamentoDto = _mapper.Map<List<ReadOrcamentoDto>>(orcamento);
                 return Ok(orcamentoDto);
             }
             return NotFound();
