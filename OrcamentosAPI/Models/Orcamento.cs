@@ -16,6 +16,8 @@ namespace OrcamentosAPI.Models
         public double QtdProdutos { get; set; }
         [JsonIgnore]
         public double ValorTotalProdutos { get; set; }
+        [JsonIgnore]
+        public double ValorDaComissao { get; set; }
         public virtual Produto Produto { get; set; }
         public virtual Vendedor Vendedor { get; set; }
     }

@@ -8,8 +8,9 @@ namespace OrcamentosAPI.Data.Dtos.Budget
     {
         public int Id { get; set; }
         public double QtdProdutos { get; set; }
+        public double ValorDaComissao { get; set; }
+        public virtual Vendedor Vendedor { get; set; }
         public double ValorTotalProdutos { get; set; }
         public virtual Produto Produto { get; set; }
-        public virtual Vendedor Vendedor { get; set; }
     }
 }

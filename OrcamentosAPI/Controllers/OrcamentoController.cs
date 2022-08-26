@@ -27,8 +27,10 @@ namespace OrcamentosAPI.Controllers
         {            
             Orcamento orcamento = _mapper.Map<Orcamento>(orcamentoDto);
             Produto produto = _context.Produto.FirstOrDefault(produto => produto.Id == orcamento.ProdutoId);
+            Vendedor vendedor = _context.Vendedor.FirstOrDefault(vendedor => vendedor.Id == orcamento.VendedorId);
 
             orcamento.ValorTotalProdutos = orcamento.QtdProdutos * produto.Valor;
+            orcamento.ValorDaComissao = orcamento.ValorTotalProdutos * vendedor.Comissao;
 
             _context.Orcamentos.Add(orcamento);
             _context.SaveChanges();
